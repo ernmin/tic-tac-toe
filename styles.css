@@ -1,0 +1,29 @@
+.page {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+
+  }
+  .container {
+    display: grid;
+    grid-template-rows: repeat(3, minmax(50px, 150px));
+    grid-template-columns: repeat(3, minmax(50px, 150px));
+    justify-content: center;
+    align-content: center;
+    margin-top: 5rem;
+    gap: 10px;
+  }
+  
+.box {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid black;
+}
+
+.buttons {
+    margin-top: 15px;
+}
