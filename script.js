@@ -21,7 +21,12 @@ function Gameboard() {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()))
         console.log(boardWithCellValues);
     }
-    return { getBoard, drawSymbol, printBoard };
+
+    const getSymbol = (row, column) => {
+        return board[row][column];
+    }
+
+    return { getBoard, drawSymbol, printBoard, getSymbol };
 }
 
 function Cell() {
@@ -69,6 +74,10 @@ function GameController(
     };
 
     const playRound = (row, column) => {
+        if (board.getSymbol(row, column).getValue() != 0){
+            console.log('Invalid move, please choose another square');
+            return;
+        }
         console.log(
             `${getActivePlayer().name} plays in row ${row} and column ${column}`
         );
@@ -86,5 +95,6 @@ function GameController(
 }
 
 const game = GameController();
+const gameboard = Gameboard();
 
 /*DOM Cache?*/
