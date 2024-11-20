@@ -35,6 +35,9 @@ function Gameboard() {
         return singleRow;
     }
 
+    //add a getColumn function
+    //add a get Diagonal function
+
     return { getBoard, drawSymbol, printBoard, getSymbol, getRow, };
 }
 
@@ -72,8 +75,20 @@ function GameController(
 
     let activePlayer = players[0];
 
-    const checkRow = () => {
+    const allEqual = (arr) => arr.every(val => val === arr[0]);
 
+    const checkRow = () => {
+        for (let eachRow = 0; eachRow < 3; eachRow ++){
+            if (board.getRow(eachRow)[0] != 0 && allEqual(board.getRow(eachRow))) {
+                console.log('row ', eachRow, ' is equal');
+                //break if winning combination is found and declare Active Player has won. Do not switch player over.
+            }
+            else {
+                console.log('row ', eachRow, ' is not equal');
+                //continue
+            }
+        }
+        
     }
     
     const switchPlayerTurn = () => {
@@ -86,6 +101,8 @@ function GameController(
         console.log(`${getActivePlayer().name}'s turn.`);
     };
 
+    //add game over function
+
     const playRound = (row, column) => {
         if (board.getSymbol(row, column).getValue() != 0){
             console.log('Invalid move, please choose another square');
@@ -96,7 +113,7 @@ function GameController(
         );
         board.drawSymbol(row, column, getActivePlayer().symbol);
 //insert function here to check for win condition
-
+        checkRow();
         switchPlayerTurn();
         printNewRound();
     }
