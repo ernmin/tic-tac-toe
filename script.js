@@ -11,6 +11,7 @@ function Gameboard() {
     }
 
     const getBoard = () => board;
+    //check IIFE for the board
 
     const drawSymbol = (row, column, player) => {
 
@@ -26,7 +27,15 @@ function Gameboard() {
         return board[row][column];
     }
 
-    return { getBoard, drawSymbol, printBoard, getSymbol };
+    const getRow = (row) => {
+        let singleRow = [];
+        for (let column = 0; column < 3; column ++){
+            singleRow[column] = board[row][column].getValue();
+        };
+        return singleRow;
+    }
+
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, };
 }
 
 function Cell() {
@@ -40,7 +49,7 @@ function Cell() {
 
     return {
         addMove,
-        getValue
+        getValue,
     };
 }
 
@@ -62,6 +71,10 @@ function GameController(
     ];
 
     let activePlayer = players[0];
+
+    const checkRow = () => {
+
+    }
     
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -82,6 +95,8 @@ function GameController(
             `${getActivePlayer().name} plays in row ${row} and column ${column}`
         );
         board.drawSymbol(row, column, getActivePlayer().symbol);
+//insert function here to check for win condition
+
         switchPlayerTurn();
         printNewRound();
     }
@@ -90,11 +105,11 @@ function GameController(
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        board, 
     };
 }
 
 const game = GameController();
-const gameboard = Gameboard();
 
 /*DOM Cache?*/
