@@ -43,10 +43,19 @@ function Gameboard() {
         return singleColumn;
     }
 
+    const getFirstDiagonal = () => {
+        let firstDiagonal = [];
+        for( let i = 0; i < 3; i++){
+            firstDiagonal[i] = board[i][i].getValue();
+        };
+        
+        return firstDiagonal;
+    }
+
     //add a getColumn function
     //add a get Diagonal function
 
-    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, };
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, };
 }
 
 function Cell() {
@@ -111,6 +120,15 @@ function GameController(
             }
         }
     }
+
+    const checkDiagonal = () => {
+        if(board.getFirstDiagonal()[0]!= 0 && allEqual(board.getFirstDiagonal())){
+            console.log('first diagonal is equal');
+        }
+        else{
+            console.log('first diagonal is not equal');
+        }
+    }
     
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -136,6 +154,7 @@ function GameController(
 //insert function here to check for win condition
         checkRow();
         checkColumn();
+        checkDiagonal();
         switchPlayerTurn();
         printNewRound();
     }
@@ -148,6 +167,7 @@ function GameController(
         board, 
     };
 }
+
 
 const game = GameController();
 
