@@ -29,16 +29,24 @@ function Gameboard() {
 
     const getRow = (row) => {
         let singleRow = [];
-        for (let column = 0; column < 3; column ++){
+        for (let column = 0; column < 3; column++){
             singleRow[column] = board[row][column].getValue();
         };
         return singleRow;
     }
 
+    const getColumn = (column) => {
+        let singleColumn = [];
+        for (let row = 0; row < 3; row++){
+            singleColumn[row] = board[row][column].getValue();
+        };
+        return singleColumn;
+    }
+
     //add a getColumn function
     //add a get Diagonal function
 
-    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, };
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, };
 }
 
 function Cell() {
@@ -90,6 +98,19 @@ function GameController(
         }
         
     }
+
+    const checkColumn = () => {
+        for (let eachColumn = 0; eachColumn < 3; eachColumn ++){
+            if (board.getColumn(eachColumn)[0] != 0 && allEqual(board.getColumn(eachColumn))) {
+                console.log('column ', eachColumn, ' is equal');
+                //break if winning combination is found and declare Active Player has won. Do not switch player over.
+            }
+            else {
+                console.log('column ', eachColumn, ' is not equal');
+                //continue
+            }
+        }
+    }
     
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -114,6 +135,7 @@ function GameController(
         board.drawSymbol(row, column, getActivePlayer().symbol);
 //insert function here to check for win condition
         checkRow();
+        checkColumn();
         switchPlayerTurn();
         printNewRound();
     }
