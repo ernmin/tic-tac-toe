@@ -51,11 +51,19 @@ function Gameboard() {
         
         return firstDiagonal;
     }
+    const getSecondDiagonal = () => {
+        let secondDiagonal = [];
+        for(let i = 0; i < 3; i++){
+            secondDiagonal[i] = board[i][2 - i].getValue();    
+        };
+        
+        return secondDiagonal;
+    }
 
     //add a getColumn function
     //add a get Diagonal function
 
-    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, };
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal};
 }
 
 function Cell() {
@@ -128,6 +136,14 @@ function GameController(
         else{
             console.log('first diagonal is not equal');
         }
+
+        if(board.getSecondDiagonal()[0]!= 0 && allEqual(board.getSecondDiagonal())){
+            console.log('second diagonal is equal');
+        }
+        else{
+            console.log('second diagonal is not equal');
+        }
+
     }
     
     const switchPlayerTurn = () => {
