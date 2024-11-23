@@ -2,6 +2,7 @@ function Gameboard() {
     const rows = 3;
     const columns = 3;
     const board = [];
+    let gameOver = false;
 
     for(let i = 0; i < rows; i++){
         board[i] = [];
@@ -60,10 +61,19 @@ function Gameboard() {
         return secondDiagonal;
     }
 
+    const reset = () => {
+        for(let i = 0; i < rows; i++){
+        board[i] = [];
+        for(let j = 0; j < columns; j++){
+            board[i].push(Cell())
+        }
+    }
+    }
+
     //add a getColumn function
     //add a get Diagonal function
 
-    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal};
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal, gameOver, reset};
 }
 
 function Cell() {
@@ -106,6 +116,7 @@ function GameController(
         for (let eachRow = 0; eachRow < 3; eachRow ++){
             if (board.getRow(eachRow)[0] != 0 && allEqual(board.getRow(eachRow))) {
                 console.log('row ', eachRow, ' is equal');
+                return true;
                 //break if winning combination is found and declare Active Player has won. Do not switch player over.
             }
             else {
@@ -120,6 +131,7 @@ function GameController(
         for (let eachColumn = 0; eachColumn < 3; eachColumn ++){
             if (board.getColumn(eachColumn)[0] != 0 && allEqual(board.getColumn(eachColumn))) {
                 console.log('column ', eachColumn, ' is equal');
+                return true;
                 //break if winning combination is found and declare Active Player has won. Do not switch player over.
             }
             else {
@@ -132,6 +144,7 @@ function GameController(
     const checkDiagonal = () => {
         if(board.getFirstDiagonal()[0]!= 0 && allEqual(board.getFirstDiagonal())){
             console.log('first diagonal is equal');
+            return true;
         }
         else{
             console.log('first diagonal is not equal');
@@ -139,6 +152,7 @@ function GameController(
 
         if(board.getSecondDiagonal()[0]!= 0 && allEqual(board.getSecondDiagonal())){
             console.log('second diagonal is equal');
+            return true;
         }
         else{
             console.log('second diagonal is not equal');
@@ -158,6 +172,19 @@ function GameController(
 
     //add game over function
 
+    const winner = () => {
+        let row = checkRow();
+        let column = checkColumn();
+        let diagonal = checkDiagonal();
+        if(row || column || diagonal) {
+            console.log('Game Over ', getActivePlayer, ' wins!');
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     const playRound = (row, column) => {
         if (board.getSymbol(row, column).getValue() != 0){
             console.log('Invalid move, please choose another square');
@@ -168,9 +195,11 @@ function GameController(
         );
         board.drawSymbol(row, column, getActivePlayer().symbol);
 //insert function here to check for win condition
-        checkRow();
-        checkColumn();
-        checkDiagonal();
+        gameOver = winner();
+        if (gameOver == true){
+            board.reset();
+            return;
+        }
         switchPlayerTurn();
         printNewRound();
     }
