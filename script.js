@@ -198,6 +198,7 @@ function GameController(
         gameOver = winner();
         if (gameOver == true){
             board.reset();
+            //should the board immediately reset?
             return;
         }
         switchPlayerTurn();
@@ -214,6 +215,52 @@ function GameController(
 }
 
 
-const game = GameController();
+function ScreenController() {
+    const game = GameController();
+    const playerTurnDiv = document.querySelector('#whose-turn');
+    const boxDiv = document.querySelectorAll('.box'); // just do for the first box first
+    /*const boxDiv = document.querySelectorAll('.box');*/
+    for(let i = 0; i < boxDiv.length; i++) {
+        boxDiv[i].addEventListener('click', (e) => {
+            const selectedRow = e.target.dataset.row;
+            const selectedColumn = e.target.dataset.column;
+            game.playRound(selectedRow,selectedColumn);
+            updateScreen();
+        })
+    }
+
+
+    
+    
+
+    
+    
+
+    
+    
+
+    //Add event listener for each box
+    //AppendChild upon click using the updateScreen method
+    //Disable the grid if the gameOver variable is 'true'
+
+    const updateScreen = () => {
+        const activePlayer = game.getActivePlayer();
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+    }
+
+    /*function clickHandlerBoard(e) {
+        const selectedRow = e.target.dataset.row
+        const selectedColumn = e.target.dataset.column
+        game.playRound(selectedRow,selectedColumn)
+        updateScreen();
+    }
+
+    updateScreen();*/
+
+   
+    
+}
+
+ScreenController();
 
 /*DOM Cache?*/
