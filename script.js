@@ -225,40 +225,40 @@ function ScreenController() {
             const selectedRow = e.target.dataset.row;
             const selectedColumn = e.target.dataset.column;
             game.playRound(selectedRow,selectedColumn);
+            /*const activePlayer = game.getActivePlayer();
+            let image = document.createElement("img");
+            if (activePlayer.symbol == 1) {
+                image.src = "o-mark.png"
+                appendChild(image);
+            }*/
+            appendSymbol(selectedRow,selectedColumn);
             updateScreen();
         })
     }
 
-
-    
-    
-
-    
-    
-
-    
-    
-
-    //Add event listener for each box
-    //AppendChild upon click using the updateScreen method
+    //Add event listener for each box (done)
+    //AppendChild upon click using the updateScreen method (done)
     //Disable the grid if the gameOver variable is 'true'
+    //End game condition to reset the screen
 
     const updateScreen = () => {
         const activePlayer = game.getActivePlayer();
         playerTurnDiv.textContent = `${activePlayer.name}'s turn`
     }
 
-    /*function clickHandlerBoard(e) {
-        const selectedRow = e.target.dataset.row
-        const selectedColumn = e.target.dataset.column
-        game.playRound(selectedRow,selectedColumn)
-        updateScreen();
+    const appendSymbol = (selectedRow, selectedColumn) => {
+        let boxtoappend = Number(selectedRow * 3) + Number(selectedColumn);
+        const activePlayer = game.getActivePlayer();
+        let image = document.createElement("img");
+        if (activePlayer.symbol == 1) {
+            image.src = "o-mark.png"
+            boxDiv[boxtoappend].appendChild(image);
+        }
+        else {
+            image.src = "x-mark.png"
+            boxDiv[boxtoappend].appendChild(image);
+        }
     }
-
-    updateScreen();*/
-
-   
-    
 }
 
 ScreenController();
