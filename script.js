@@ -224,6 +224,10 @@ function ScreenController() {
         boxDiv[i].addEventListener('click', (e) => {
             const selectedRow = e.target.dataset.row;
             const selectedColumn = e.target.dataset.column;
+            if(selectedRow === undefined || selectedColumn === undefined){
+                return;
+            }
+            appendSymbol(selectedRow,selectedColumn);
             game.playRound(selectedRow,selectedColumn);
             /*const activePlayer = game.getActivePlayer();
             let image = document.createElement("img");
@@ -231,7 +235,7 @@ function ScreenController() {
                 image.src = "o-mark.png"
                 appendChild(image);
             }*/
-            appendSymbol(selectedRow,selectedColumn);
+            
             updateScreen();
         })
     }
@@ -247,6 +251,9 @@ function ScreenController() {
     }
 
     const appendSymbol = (selectedRow, selectedColumn) => {
+        if(game.board.getSymbol(selectedRow,selectedColumn).getValue() != 0){
+            return;
+        }
         let boxtoappend = Number(selectedRow * 3) + Number(selectedColumn);
         const activePlayer = game.getActivePlayer();
         let image = document.createElement("img");
