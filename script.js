@@ -63,15 +63,14 @@ function Gameboard() {
 
     const reset = () => {
         for(let i = 0; i < rows; i++){
-        board[i] = [];
-        for(let j = 0; j < columns; j++){
-            board[i].push(Cell())
+            board[i] = [];
+            for(let j = 0; j < columns; j++){
+                board[i].push(Cell())
+            }
         }
+        
+       //Why is this not working? Something wrong with hasChildNodes()
     }
-    }
-
-    //add a getColumn function
-    //add a get Diagonal function
 
     return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal, gameOver, reset};
 }
@@ -218,8 +217,20 @@ function GameController(
 function ScreenController() {
     const game = GameController();
     const playerTurnDiv = document.querySelector('#whose-turn');
+    const resetButton = document.querySelector('#reset');
+    
     const boxDiv = document.querySelectorAll('.box'); // just do for the first box first
     /*const boxDiv = document.querySelectorAll('.box');*/
+    resetButton.addEventListener('click', () => {
+        game.board.reset();
+        for (let i = 0; i < boxDiv.length; i++){
+            console.log(boxDiv[i].hasChildNodes())
+            if (boxDiv[i].hasChildNodes()){
+                boxDiv[i].removeChild(boxDiv[i].firstElementChild)
+            }
+        }
+    })
+
     for(let i = 0; i < boxDiv.length; i++) {
         boxDiv[i].addEventListener('click', (e) => {
             const selectedRow = e.target.dataset.row;
@@ -266,6 +277,9 @@ function ScreenController() {
             boxDiv[boxtoappend].appendChild(image);
         }
     }
+
+    
+    
 }
 
 ScreenController();
