@@ -68,7 +68,9 @@ function Gameboard() {
                 board[i].push(Cell())
             }
         }
-        
+        printBoard();
+
+
        //Why is this not working? Something wrong with hasChildNodes()
     }
 
@@ -164,6 +166,8 @@ function GameController(
     };
     const getActivePlayer = () => activePlayer;
 
+    const resetActivePlayer = () => activePlayer = players[0];
+
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`);
@@ -176,7 +180,7 @@ function GameController(
         let column = checkColumn();
         let diagonal = checkDiagonal();
         if(row || column || diagonal) {
-            console.log('Game Over ', getActivePlayer, ' wins!');
+            console.log('Game Over ', getActivePlayer().name, ' wins!');
             return true;
         }
         else{
@@ -189,17 +193,16 @@ function GameController(
             console.log('Invalid move, please choose another square');
             return;
         }
+        else if (board.gameOver == true){
+            console.log('Game Over, move not allowed');
+            return;
+        }
         console.log(
             `${getActivePlayer().name} plays in row ${row} and column ${column}`
         );
         board.drawSymbol(row, column, getActivePlayer().symbol);
 //insert function here to check for win condition
-        gameOver = winner();
-        if (gameOver == true){
-            board.reset();
-            //should the board immediately reset?
-            return;
-        }
+        board.gameOver = winner();
         switchPlayerTurn();
         printNewRound();
     }
@@ -209,6 +212,7 @@ function GameController(
     return {
         playRound,
         getActivePlayer,
+        resetActivePlayer,
         board, 
     };
 }
@@ -223,12 +227,16 @@ function ScreenController() {
     /*const boxDiv = document.querySelectorAll('.box');*/
     resetButton.addEventListener('click', () => {
         game.board.reset();
+        game.resetActivePlayer();
+        game.board.gameOver = false;
+        console.log(game.getActivePlayer(), ' is active player');
         for (let i = 0; i < boxDiv.length; i++){
-            console.log(boxDiv[i].hasChildNodes())
             if (boxDiv[i].hasChildNodes()){
                 boxDiv[i].removeChild(boxDiv[i].firstElementChild)
             }
         }
+
+        updateScreen();
     })
 
     for(let i = 0; i < boxDiv.length; i++) {
@@ -258,11 +266,19 @@ function ScreenController() {
 
     const updateScreen = () => {
         const activePlayer = game.getActivePlayer();
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+        if(game.board.gameOver == true){
+            playerTurnDiv.textContent = `Game Over! ${activePlayer.name} Wins`
+        }
+        
+        else{
+            playerTurnDiv.textContent = `${activePlayer.name}'s turn`
+        }
+        
     }
 
     const appendSymbol = (selectedRow, selectedColumn) => {
-        if(game.board.getSymbol(selectedRow,selectedColumn).getValue() != 0){
+        console.log('gameOver is', game.board.gameOver);
+        if(game.board.getSymbol(selectedRow,selectedColumn).getValue() != 0 || game.board.gameOver == true){
             return;
         }
         let boxtoappend = Number(selectedRow * 3) + Number(selectedColumn);
