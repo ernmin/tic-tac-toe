@@ -3,6 +3,7 @@ function Gameboard() {
     const columns = 3;
     const board = [];
     let gameOver = false;
+    let moveCount = 0;
 
     for(let i = 0; i < rows; i++){
         board[i] = [];
@@ -74,7 +75,7 @@ function Gameboard() {
        //Why is this not working? Something wrong with hasChildNodes()
     }
 
-    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal, gameOver, reset};
+    return { getBoard, drawSymbol, printBoard, getSymbol, getRow, getColumn, getFirstDiagonal, getSecondDiagonal, gameOver, reset, moveCount};
 }
 
 function Cell() {
@@ -201,8 +202,12 @@ function GameController(
             `${getActivePlayer().name} plays in row ${row} and column ${column}`
         );
         board.drawSymbol(row, column, getActivePlayer().symbol);
+        board.moveCount = board.moveCount + 1;
 //insert function here to check for win condition
         board.gameOver = winner();
+        if (board.gameOver == true){
+            return;
+        }
         switchPlayerTurn();
         printNewRound();
     }
@@ -229,6 +234,7 @@ function ScreenController() {
         game.board.reset();
         game.resetActivePlayer();
         game.board.gameOver = false;
+        game.board.moveCount = 0;
         console.log(game.getActivePlayer(), ' is active player');
         for (let i = 0; i < boxDiv.length; i++){
             if (boxDiv[i].hasChildNodes()){
@@ -261,8 +267,9 @@ function ScreenController() {
 
     //Add event listener for each box (done)
     //AppendChild upon click using the updateScreen method (done)
-    //Disable the grid if the gameOver variable is 'true'
-    //End game condition to reset the screen
+    //Disable the grid if the gameOver variable is 'true' (done)
+    //End game condition to reset the screen (done)
+    //How to display 'It's a tie!'
 
     const updateScreen = () => {
         const activePlayer = game.getActivePlayer();
@@ -270,11 +277,15 @@ function ScreenController() {
             playerTurnDiv.textContent = `Game Over! ${activePlayer.name} Wins`
         }
         
+        else if (game.board.moveCount == 9){
+            playerTurnDiv.textContent = "It's a tie!"
+        }
         else{
             playerTurnDiv.textContent = `${activePlayer.name}'s turn`
         }
         
     }
+    updateScreen();
 
     const appendSymbol = (selectedRow, selectedColumn) => {
         console.log('gameOver is', game.board.gameOver);
