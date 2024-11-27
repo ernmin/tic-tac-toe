@@ -99,7 +99,7 @@ function GameController(
 ) {
     const board = Gameboard();
 
-    const players = [
+    let players = [
         {
             name: playerOneName,
             symbol: 1
@@ -111,6 +111,18 @@ function GameController(
     ];
 
     let activePlayer = players[0];
+    
+
+    const updatePlayerNames = () => {
+        players[0].name = prompt("Enter Player One's Name: ", "Player One");
+        while(players[0].name == '' || (players[0].name == null )){
+            players[0].name = prompt("Enter Player One's Name: ", "Player One");
+        }
+        players[1].name = prompt("Enter Player Two's Name: ", "Player Two");
+        while(players[1].name == '' || (players[1].name == null)){
+            players[1].name = prompt("Enter Player Two's Name: ", "Player Two");
+        }
+    }
 
     const allEqual = (arr) => arr.every(val => val === arr[0]);
 
@@ -218,6 +230,7 @@ function GameController(
         playRound,
         getActivePlayer,
         resetActivePlayer,
+        updatePlayerNames,
         board, 
     };
 }
@@ -225,6 +238,7 @@ function GameController(
 
 function ScreenController() {
     const game = GameController();
+    
     const playerTurnDiv = document.querySelector('#whose-turn');
     const resetButton = document.querySelector('#reset');
     
@@ -235,6 +249,7 @@ function ScreenController() {
         game.resetActivePlayer();
         game.board.gameOver = false;
         game.board.moveCount = 0;
+        game.updatePlayerNames();
         console.log(game.getActivePlayer(), ' is active player');
         for (let i = 0; i < boxDiv.length; i++){
             if (boxDiv[i].hasChildNodes()){
@@ -285,7 +300,9 @@ function ScreenController() {
         }
         
     }
+    game.updatePlayerNames();
     updateScreen();
+    
 
     const appendSymbol = (selectedRow, selectedColumn) => {
         console.log('gameOver is', game.board.gameOver);
